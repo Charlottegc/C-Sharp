@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+    class Hello
+    {
+        static void Main() {
+            string username;
+            string password;
+            ConsoleKeyInfo key;
+            Console.WriteLine("Hello World!");
+            Console.WriteLine("Press L to start login.");
+            key = Console.ReadKey();
+            while (key.Key != ConsoleKey.L)
+            {
+                Console.WriteLine("\nPress L to start login.");
+                key = Console.ReadKey();
+            }
+            while (key.Key == ConsoleKey.L)
+            {
+                Console.WriteLine("\nPlease enter you usename.");
+                username = Console.ReadLine(); 
+                Console.WriteLine("Please enter you password.");
+                password = Console.ReadLine();
+                if (username == "cha" & password == "123")
+                {
+                    Console.WriteLine("Welcome ~");
+                    while (true)
+                    {
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect!");
+                }
+            }
+        }
+    }
