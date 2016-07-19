@@ -4,37 +4,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-    class Hello
+class HelloWorld
+{
+    static void Main()
     {
-        static void Main() {
-            string username;
-            string password;
-            ConsoleKeyInfo key;
-            Console.WriteLine("Hello World!");
-            Console.WriteLine("Press L to start login.");
+        string username;
+        string password;
+        ConsoleKeyInfo key;
+        Console.WriteLine("-----Please press L to start login.-----");
+        key = Console.ReadKey();
+        while (key.KeyChar != 'L')
+        {
+            Console.WriteLine("\n-----Please press L to start login.-----");
             key = Console.ReadKey();
-            while (key.Key != ConsoleKey.L)
+        }
+        while (key.KeyChar == 'L')
+        {
+            Console.WriteLine("\n-----Please enter your username:-----");
+            username = Console.ReadLine();
+            Console.WriteLine("-----Please enter your password:-----");
+            password = Console.ReadLine();
+            if (username == "cchan" & password == "123")
             {
-                Console.WriteLine("\nPress L to start login.");
-                key = Console.ReadKey();
+                Console.WriteLine("-----Welcome！Login in as [cchan]-----");
+                Console.WriteLine("\n-----Please enter your new username:-----");
+                username = Console.ReadLine();
+                while (username == "cchan")
+                {
+                    Console.WriteLine("-----Error. This username is not available.-----");
+                    Console.WriteLine("\n-----Please enter your new username：-----");
+                    username = Console.ReadLine();
+                }
+                Console.WriteLine("-----Please enter your new password：-----");
+                    password = Console.ReadLine();
+
+                    Console.WriteLine("-----Wow！Your new account has been created！-----");
+
+                while (true)
+                {
+                }
             }
-            while (key.Key == ConsoleKey.L)
+            else
             {
-                Console.WriteLine("\nPlease enter you usename.");
-                username = Console.ReadLine(); 
-                Console.WriteLine("Please enter you password.");
-                password = Console.ReadLine();
-                if (username == "cha" & password == "123")
-                {
-                    Console.WriteLine("Welcome ~");
-                    while (true)
-                    {
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Incorrect!");
-                }
+                Console.WriteLine("-----Invaid username or password！-----");
             }
         }
     }
+}
