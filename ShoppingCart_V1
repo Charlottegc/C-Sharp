@@ -1,0 +1,265 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Exercise.Model;
+using Exercise.Service;
+
+namespace Exercise
+{
+    class Program
+    {
+
+        static void Main(string[] args)
+        {
+            int subtotal = 0;
+            int totalquantity = 0;
+            int totaltopay = 0;
+            List<ShoppingCart> cart = new List<ShoppingCart>();
+            var productService = new ProductService();
+            var products = productService.InitialiseProduct();
+
+
+            Console.WriteLine("List of all products in system");
+            Console.WriteLine("------------------------------");
+            foreach (var p in products)
+            {
+                Console.WriteLine("Product number: {0}", p.IdGuid);
+                Console.WriteLine("Product name: {0}", p.Name);
+                Console.WriteLine("Product price: {0}", p.Price);
+                Console.WriteLine("----------------------");
+            }
+            Console.WriteLine("Please enter product number you want to purchase or press P to shopping cart");
+            string input = Console.ReadLine();
+
+
+
+            do
+            {
+                var productId = 0;
+                do
+                {
+                    try
+                    {//Convert product id to integer
+                        productId = Convert.ToInt32(input);
+                        int index = -1;
+                        index = products.FindIndex(x => x.IdGuid == productId);
+                        if (index < 0)
+                        {
+                            Console.WriteLine("Product is not in our system, please enter product number you want to purchase ");
+                            productId = 0;
+                            input = Console.ReadLine();
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        if (input == "P" || input == "p")
+                        {
+                            var ordered = cart.OrderBy(x => x.IdGuid);
+                            Console.Clear();
+                            Console.WriteLine("List of all products in your shopping cart");
+                            foreach (var a in ordered)
+                            {
+                                Console.WriteLine(a.makeitstring());
+                            }
+
+
+                            totalquantity = cart.Sum(x => x.Quantity);
+                            totaltopay = cart.Sum(x => x.Subtotal);
+                            Console.WriteLine("----------You've got {0} items in your shopping cart, total to pay : NZ${1}----------", totalquantity, totaltopay);
+
+                            Console.WriteLine("Would you like to pay for the product(s) in your shopping cart. Press Y to continue");
+                            string option = Console.ReadLine();
+                            if (option == "Y" || option == "y")
+                            {
+                                Console.WriteLine("Total paid : NZ${0}", totaltopay);
+                                Console.WriteLine("Thank you for shopping with us. Bye bye!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invaid input, press Y to continue or any key to exit");
+                                option = Console.ReadLine();
+                                if (option == "Y" || option == "y")
+                                {
+                                    Console.WriteLine("Total paid : NZ${0}", totaltopay);
+                                    Console.WriteLine("Thank you for shopping with us. Bye bye!");
+                                }
+                            }
+                            Console.ReadLine();
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid, please enter product number you want to purchase or press P to shopping cart");
+                            input = Console.ReadLine();
+                        }
+                    }
+
+                } while (productId == 0);
+
+
+
+                Console.Clear();
+                //Check if product id valid 
+                //Use foreach to go through all product list
+                foreach (var pr in products)
+                {
+                    if (pr.IdGuid == productId)
+                    {
+                        var productType = pr.GetType();
+                        Console.WriteLine("We found 1 product in our system");
+                        switch (productType.Name)
+                        {
+                            case "Lawnmower":
+                                {
+                                    var lawnMower = (Lawnmower)pr;
+                                    Console.WriteLine("Product number: {0}", lawnMower.IdGuid);
+                                    Console.WriteLine("Product name: {0}", lawnMower.Name);
+                                    Console.WriteLine("Product price: {0}", lawnMower.Price);
+                                    Console.WriteLine("Product brand: {0}", lawnMower.Brand);
+                                    Console.WriteLine("Product fuel efficiency: {0}", lawnMower.FuelEfficiency);
+                                    Console.WriteLine("----------------------");
+                                    break;
+                                }
+                            case "Computer":
+                                {
+                                    var computer = (Computer)pr;
+                                    Console.WriteLine("Product number: {0}", computer.IdGuid);
+                                    Console.WriteLine("Product name: {0}", computer.Name);
+                                    Console.WriteLine("Product price: {0}", computer.Price);
+                                    Console.WriteLine("Product memory: {0}", computer.Memory);
+                                    Console.WriteLine("Product hard drive: {0}", computer.HardDrive);
+                                    Console.WriteLine("----------------------");
+                                    break;
+                                }
+                            case "Car":
+                                {
+                                    var car = (Car)pr;
+                                    Console.WriteLine("Product number: {0}", car.IdGuid);
+                                    Console.WriteLine("Product name: {0}", car.Name);
+                                    Console.WriteLine("Product price: {0}", car.Price);
+                                    Console.WriteLine("Product color: {0}", car.Color);
+                                    Console.WriteLine("----------------------");
+                                    break;
+
+                                }
+                            case "Furniture":
+                                {
+                                    var furniture = (Furniture)pr;
+                                    Console.WriteLine("Product number: {0}", furniture.IdGuid);
+                                    Console.WriteLine("Product name: {0}", furniture.Name);
+                                    Console.WriteLine("Product price: {0}", furniture.Price);
+                                    Console.WriteLine("Product material: {0}", furniture.Material);
+                                    Console.WriteLine("----------------------");
+                                    break;
+
+                                }
+                            case "Sport_Equipment":
+                                {
+                                    var sport = (Sport_Equipment)pr;
+                                    Console.WriteLine("Product number: {0}", sport.IdGuid);
+                                    Console.WriteLine("Product name: {0}", sport.Name);
+                                    Console.WriteLine("Product price: {0}", sport.Price);
+                                    Console.WriteLine("Product quality: {0}", sport.Quality);
+                                    Console.WriteLine("----------------------");
+                                    break;
+
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+
+                        }
+                        Console.WriteLine("How many {0} you want to buy?", pr.Name);
+                        var quantityinput = Console.ReadLine();
+                        int quantity = 0;
+                        do
+                        {
+                            try
+                            {
+                                quantity = Convert.ToInt32(quantityinput);
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Invalid input, please enter the quantity you want to purchase");
+                                quantityinput = Console.ReadLine();
+                            }
+                        } while (quantity == 0);
+
+
+                        Console.WriteLine("Wooohooo~ {0} {1} added to your shopping cart, please enter any key to continue", quantity, pr.Name);
+                        Console.ReadLine();
+                        Console.Clear();
+
+
+
+                        int index = cart.FindIndex(x => x.IdGuid == productId);
+                        ShoppingCart product = cart.Find(x => x.IdGuid == productId);
+                        if (index >= 0)
+                        {
+                            cart.RemoveAt(index);
+                            quantity += product.Quantity;
+                        }
+                        subtotal = quantity * pr.Price;
+                        cart.Add(new ShoppingCart() { IdGuid = pr.IdGuid, Name = pr.Name, Price = pr.Price, Quantity = quantity, Subtotal = subtotal });
+                    }
+
+                }
+
+                Console.WriteLine("List of all products in system");
+                foreach (var p in products)
+                {
+                    Console.WriteLine("Product number: {0}", p.IdGuid);
+                    Console.WriteLine("Product name: {0}", p.Name);
+                    Console.WriteLine("Product price: {0}", p.Price);
+                    Console.WriteLine("----------------------");
+                }
+
+
+
+
+                Console.WriteLine("What else you want to purchase? Please enter Product number or press P to check the shopping cart");
+                input = Console.ReadLine();
+            } while (input != "P" && input != "p");
+
+
+            var orderedcart = cart.OrderBy(x => x.IdGuid);
+            Console.Clear();
+            Console.WriteLine("List of all products in your shopping cart");
+            foreach (var a in orderedcart)
+            {
+                Console.WriteLine(a.makeitstring());
+            }
+
+
+            totalquantity = cart.Sum(x => x.Quantity);
+            totaltopay = cart.Sum(x => x.Subtotal);
+            Console.WriteLine("----------You've got {0} items in your shopping cart, total to pay : NZ${1}----------", totalquantity, totaltopay);
+
+            if (totaltopay != 0)
+            {
+                Console.WriteLine("Would you like to pay for the product(s) in your shopping cart. Press Y to continue");
+                string option = Console.ReadLine();
+                if (option == "Y" || option == "y")
+                {
+                    Console.WriteLine("Total paid : NZ${0}", totaltopay);
+                    Console.WriteLine("Thank you for shopping with us. Bye bye!");
+                }
+                else
+                {
+                    Console.WriteLine("Invaid input, press Y to continue or any key to exit");
+                    option = Console.ReadLine();
+                    if (option == "Y" || option == "y")
+                    {
+                        Console.WriteLine("Total paid : NZ${0}", totaltopay);
+                        Console.WriteLine("Thank you for shopping with us. Bye bye!");
+                    }
+                }
+            }
+            Console.ReadLine();
+        }
+    }
+}
