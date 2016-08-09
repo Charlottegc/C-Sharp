@@ -1,0 +1,54 @@
+class Program
+    {
+        static void Main(string[] args)
+        {
+            AddNewInstructor();
+            AddNewStudent();
+            AddNewCourse();
+            Console.ReadKey();
+        }
+
+        public static void AddNewInstructor()
+        {
+            SchoolEntities schoolDB = new SchoolEntities();
+            Person newInstructorP = new Person();
+            newInstructorP.FirstName = "Gracie";
+            newInstructorP.LastName = "Tang";
+            newInstructorP.EnrollmentDate = null;
+            newInstructorP.HireDate = new DateTime(2014, 10, 10);
+            CourseInstructor newInstructorCI = new CourseInstructor();
+            newInstructorCI.CourseID = 1045;
+            OfficeAssignment newInstructorOA = new OfficeAssignment();
+            newInstructorOA.Location = "Nanjing";
+            schoolDB.Person.Add(newInstructorP);
+            schoolDB.CourseInstructor.Add(newInstructorCI);
+            schoolDB.OfficeAssignment.Add(newInstructorOA);
+            schoolDB.SaveChanges();
+        }
+        public static void AddNewStudent()
+        {
+            SchoolEntities schoolDB = new SchoolEntities();
+            Person newStudentP = new Person();
+            newStudentP.FirstName = "Charlotte";
+            newStudentP.LastName = "Chan";
+            newStudentP.EnrollmentDate = new DateTime(2016, 08, 09);
+            newStudentP.HireDate = null;
+            StudentGrade newStudentSG = new StudentGrade();
+            newStudentSG.CourseID = 1045;
+            newStudentSG.Grade = null;
+            schoolDB.Person.Add(newStudentP);
+            schoolDB.StudentGrade.Add(newStudentSG);
+            schoolDB.SaveChanges();
+        }
+        public static void AddNewCourse()
+        {
+            SchoolEntities schoolDB = new SchoolEntities();
+            Course newCourse = new Course();
+            newCourse.CourseID = 520;
+            newCourse.Title = "Love";
+            newCourse.Credits = 3;
+            newCourse.DepartmentID = 1;
+            schoolDB.Course.Add(newCourse);
+            schoolDB.SaveChanges();
+        }
+    }
